@@ -1,23 +1,53 @@
 package com.atguigu.gmall.pms.service.impl;
 
-import com.atguigu.gmall.common.bean.ResponseVo;
+import com.atguigu.gmall.pms.entity.*;
+import com.atguigu.gmall.pms.feign.GmallSmsClient;
+import com.atguigu.gmall.pms.mapper.*;
+import com.atguigu.gmall.pms.service.SkuAttrValueService;
+import com.atguigu.gmall.pms.service.SkuImagesService;
+import com.atguigu.gmall.pms.service.SpuAttrValueService;
+import com.atguigu.gmall.pms.vo.SkuVo;
+import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
+import com.atguigu.gmall.pms.vo.SpuVo;
+import com.atguigu.gmall.sms.vo.SkuSaleVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.PageParamVo;
 
-import com.atguigu.gmall.pms.mapper.SpuMapper;
-import com.atguigu.gmall.pms.entity.SpuEntity;
 import com.atguigu.gmall.pms.service.SpuService;
+import org.springframework.util.CollectionUtils;
 
 
 @Service("spuService")
 public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements SpuService {
+
+    @Autowired
+    private SpuDescMapper descMapper;
+
+    @Autowired
+    private SpuAttrValueService baseAttrService;
+
+    @Autowired
+    private SkuMapper skuMapper;
+
+    @Autowired
+    private SkuImagesService imagesService;
+
+    @Autowired
+    private SkuAttrValueService saleAttrValueService;
+
+    @Autowired
+    private GmallSmsClient smsClient;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -48,4 +78,128 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         return new PageResultVo(page);
     }
 
+    @Override
+    public void bigSave(SpuVo spu) {
+        //1. 先保存spu相关信息
+        //1.1 保存pms_spu
+        spu.setCreateTime(new Date());
+        spu.setUpdateTime(spu.getCreateTime());
+        this.save(spu);
+        Long spuId = spu.getId();
+
+        //1.2 保存pms_spu_desc
+        List<String> spuImages = spu.getSpuImages();
+        if (!CollectionUtils.isEmpty(spuImages)){
+            SpuDescEntity spuDescEntity = new SpuDescEntity();
+            spuDescEntity.setSpuId(spuId);
+            spuDescEntity.setDecript(StringUtils.join(spuImages,","));
+            this.descMapper.insert(spuDescEntity);
+        }
+
+        //1.3 保存pms_spu_attr_value
+        List<SpuAttrValueVo> baseAttrs = spu.getBaseAttrs();
+        if (!CollectionUtils.isEmpty(baseAttrs)){
+            this.baseAttrService.saveBatch(
+                baseAttrs.stream().map(spuAttrValueVo ->{
+                    SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
+                    BeanUtils.copyProperties(spuAttrValueVo,spuAttrValueEntity);
+                    spuAttrValueEntity.setSpuId(spuId);
+                    return spuAttrValueEntity;
+                }).collect(Collectors.toList())
+            );
+        }
+        //2. 再保存sku相关信息
+         List<SkuVo> skus = spu.getSkus();
+        if (CollectionUtils.isEmpty(skus)){
+            return;
+        }
+        skus.forEach(sku ->{
+            //2.1 保存pms_sku
+            sku.setSpuId(spuId);
+            sku.setCategoryId(spu.getCategoryId());
+            sku.setBrandId(spu.getBrandId());
+            // 设置默认图片
+            List<String> images = sku.getImages();
+            if (!CollectionUtils.isEmpty(images)){
+                sku.setDefaultImage(StringUtils.isNotBlank(sku.getDefaultImage()) ? sku.getDefaultImage() : images.get(0));
+            }
+            this.skuMapper.insert(sku);
+            Long skuId = sku.getId();
+            //2.2 保存pms_sku_images
+            if (!CollectionUtils.isEmpty(images)){
+                this.imagesService.saveBatch(images.stream().map(image ->{
+                    SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
+                    skuImagesEntity.setUrl(image);
+                    skuImagesEntity.setSkuId(skuId);
+                    skuImagesEntity.setDefaultStatus(StringUtils.equals(sku.getDefaultImage(), image) ? 1 : 0);
+                    return skuImagesEntity;
+                }).collect(Collectors.toList()));
+            }
+            //2.3 保存pms_sku_attr_value
+            List<SkuAttrValueEntity> saleAttrs = sku.getSaleAttrs();
+            if (!CollectionUtils.isEmpty(saleAttrs)){
+                saleAttrs.forEach(skuAttrValueEntity -> skuAttrValueEntity.setSkuId(skuId));
+                this.saleAttrValueService.saveBatch(saleAttrs);
+            }
+            //3. 最后保存营销信息
+            SkuSaleVo skuSaleVo = new SkuSaleVo();
+            BeanUtils.copyProperties(sku,skuSaleVo);
+            skuSaleVo.setSkuId(skuId);
+            this.smsClient.saveSales(skuSaleVo);
+            //3.1 sms_sku_bounds
+
+            //3.2 sms_sku_full_reduction
+
+            //3.3 sms_sku_ladder
+        });
+
+
+
+    }
+
+//    public static void main(String[] args) {
+//        List<User> users = Arrays.asList(
+//            new User(1l, "柳岩", 20),
+//            new User(2l, "马蓉", 21),
+//            new User(3l, "小鹿", 22),
+//            new User(4l, "郑爽", 23),
+//            new User(5l, "老王", 24)
+//        );
+//
+//        // 过滤filter 集合之间的转化map 求和reduce
+//        users
+//                .stream()
+//                .filter(user -> user.getAge()>20)
+//                .collect(Collectors.toList())
+//                .forEach(System.out::println);
+//        users
+//                .stream()
+//                .map(User::getName)
+//                .collect(Collectors.toList())
+//                .forEach(System.out::println);
+//        users.stream().map(user -> {
+//            Person person = new Person();
+//            person.setId(user.getId());
+//            person.setName(user.getName());
+//            person.setAge(user.getAge());
+//            return person;
+//        }).collect(Collectors.toList()).forEach(System.out::println);
+//        System.out.println(users.stream().map(User::getAge).reduce((a,b)->a+b).get());
+//    }
 }
+
+//@Data
+//@AllArgsConstructor //生成一个包含所有变量的构造函数
+//@NoArgsConstructor  //生成一个空参的构造函数
+//class User{
+//    private Long id;
+//    private String name;
+//    private Integer age;
+//}
+//
+//@Data
+//class Person{
+//    private Long id;
+//    private String name;
+//    private Integer age;
+//}
