@@ -5,13 +5,7 @@ import java.util.List;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.service.SkuAttrValueService;
@@ -34,12 +28,20 @@ public class SkuAttrValueController {
     @Autowired
     private SkuAttrValueService skuAttrValueService;
 
+    @GetMapping("search/{cid}")
+    public ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
+            @PathVariable("cid") Long cid,
+            @RequestParam("skuId")Long skuId
+    ){
+        List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueService.querySearchAttrValueByCidAndSkuId(cid,skuId);
+        return ResponseVo.ok(skuAttrValueEntities);
+    }
     /**
      * 列表
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySkuAttrValueByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySkuAttrValueByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = skuAttrValueService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +53,8 @@ public class SkuAttrValueController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SkuAttrValueEntity> querySkuAttrValueById(@PathVariable("id") Long id){
-		SkuAttrValueEntity skuAttrValue = skuAttrValueService.getById(id);
+    public ResponseVo<SkuAttrValueEntity> querySkuAttrValueById(@PathVariable("id") Long id) {
+        SkuAttrValueEntity skuAttrValue = skuAttrValueService.getById(id);
 
         return ResponseVo.ok(skuAttrValue);
     }
@@ -62,8 +64,8 @@ public class SkuAttrValueController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SkuAttrValueEntity skuAttrValue){
-		skuAttrValueService.save(skuAttrValue);
+    public ResponseVo<Object> save(@RequestBody SkuAttrValueEntity skuAttrValue) {
+        skuAttrValueService.save(skuAttrValue);
 
         return ResponseVo.ok();
     }
@@ -73,8 +75,8 @@ public class SkuAttrValueController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SkuAttrValueEntity skuAttrValue){
-		skuAttrValueService.updateById(skuAttrValue);
+    public ResponseVo update(@RequestBody SkuAttrValueEntity skuAttrValue) {
+        skuAttrValueService.updateById(skuAttrValue);
 
         return ResponseVo.ok();
     }
@@ -84,8 +86,8 @@ public class SkuAttrValueController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		skuAttrValueService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        skuAttrValueService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

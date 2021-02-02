@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -38,14 +38,14 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
     @Override
     public List<AttrGroupEntity> queryGroupWithAttrsByCid(Long cid) {
         //1.根据分类id查询分组
-        List<AttrGroupEntity> groupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("category_id",cid));
-        if (CollectionUtils.isEmpty(groupEntities)){
+        List<AttrGroupEntity> groupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("category_id", cid));
+        if (CollectionUtils.isEmpty(groupEntities)) {
             return null;
         }
         //2.遍历分组的id查询组下的规格参数
-        groupEntities.forEach(group ->{
-           List<AttrEntity> attrEntities =this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("group_id",group.getId()).eq("type",1));
-           group.setAttrEntities(attrEntities);
+        groupEntities.forEach(group -> {
+            List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("group_id", group.getId()).eq("type", 1));
+            group.setAttrEntities(attrEntities);
         });
         return groupEntities;
     }

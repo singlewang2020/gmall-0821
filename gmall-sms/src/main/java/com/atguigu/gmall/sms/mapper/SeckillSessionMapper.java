@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 秒杀活动场次
- * 
+ *
  * @author XiangYu
  * @email 1457720646@qq.com
  * @date 2021-01-18 20:27:49
  */
 @Mapper
 public interface SeckillSessionMapper extends BaseMapper<SeckillSessionEntity> {
-	
+
 }
