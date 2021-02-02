@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 商品满减信息
- * 
+ *
  * @author XiangYu
  * @email 1457720646@qq.com
  * @date 2021-01-18 20:27:49
  */
 @Mapper
 public interface SkuFullReductionMapper extends BaseMapper<SkuFullReductionEntity> {
-	
+
 }

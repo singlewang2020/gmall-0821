@@ -3,7 +3,7 @@ package com.atguigu.gmall.pms.service.impl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,14 +32,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
     public List<AttrEntity> queryAttrsByCidAndTypeOrSearchType(Long cid, Integer type, Integer searchType) {
         QueryWrapper<AttrEntity> wrapper = new QueryWrapper<>();
         // 分类id
-        wrapper.eq("category_id",cid);
+        wrapper.eq("category_id", cid);
         // 参数类型
-        if (type != null){
-            wrapper.eq("type",type);
+        if (type != null) {
+            wrapper.eq("type", type);
         }
         // 检索类型
-        if (searchType != null){
-            wrapper.eq("search_type",searchType);
+        if (searchType != null) {
+            wrapper.eq("search_type", searchType);
         }
 
         return this.list(wrapper);

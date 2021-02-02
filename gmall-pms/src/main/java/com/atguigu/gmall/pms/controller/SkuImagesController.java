@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
@@ -39,7 +38,7 @@ public class SkuImagesController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySkuImagesByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySkuImagesByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = skuImagesService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +50,8 @@ public class SkuImagesController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SkuImagesEntity> querySkuImagesById(@PathVariable("id") Long id){
-		SkuImagesEntity skuImages = skuImagesService.getById(id);
+    public ResponseVo<SkuImagesEntity> querySkuImagesById(@PathVariable("id") Long id) {
+        SkuImagesEntity skuImages = skuImagesService.getById(id);
 
         return ResponseVo.ok(skuImages);
     }
@@ -62,8 +61,8 @@ public class SkuImagesController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SkuImagesEntity skuImages){
-		skuImagesService.save(skuImages);
+    public ResponseVo<Object> save(@RequestBody SkuImagesEntity skuImages) {
+        skuImagesService.save(skuImages);
 
         return ResponseVo.ok();
     }
@@ -73,8 +72,8 @@ public class SkuImagesController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SkuImagesEntity skuImages){
-		skuImagesService.updateById(skuImages);
+    public ResponseVo update(@RequestBody SkuImagesEntity skuImages) {
+        skuImagesService.updateById(skuImages);
 
         return ResponseVo.ok();
     }
@@ -84,8 +83,8 @@ public class SkuImagesController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		skuImagesService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        skuImagesService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

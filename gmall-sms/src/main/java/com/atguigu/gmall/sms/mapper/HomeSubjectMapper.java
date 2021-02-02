@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 首页专题表【jd首页下面很多专题，每个专题链接新的页面，展示专题商品信息】
- * 
+ *
  * @author XiangYu
  * @email 1457720646@qq.com
  * @date 2021-01-18 20:27:49
  */
 @Mapper
 public interface HomeSubjectMapper extends BaseMapper<HomeSubjectEntity> {
-	
+
 }

@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms.controller;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import com.atguigu.gmall.pms.vo.SpuVo;
@@ -35,8 +36,8 @@ public class SpuController {
     private SpuService spuService;
 
     @GetMapping("category/{categoryId}")
-    public ResponseVo<PageResultVo> querySpuByCidAndPage(PageParamVo pageParamVo,@PathVariable("categoryId")Long cid){
-        PageResultVo resultVo = this.spuService.querySpuByCidAndPage(pageParamVo,cid);
+    public ResponseVo<PageResultVo> querySpuByCidAndPage(PageParamVo pageParamVo, @PathVariable("categoryId") Long cid) {
+        PageResultVo resultVo = this.spuService.querySpuByCidAndPage(pageParamVo, cid);
         return ResponseVo.ok(resultVo);
     }
 
@@ -45,10 +46,25 @@ public class SpuController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySpuByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySpuByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = spuService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
+    }
+
+    /**
+     * 传输对象：
+     *      占位符 不能用对象来接收
+     *      ？     Feign不能接收对象 【在Feign中不支持form表单，支持Json】
+     * @param paramVo
+     * @return
+     */
+    @PostMapping("json")
+    @ApiOperation("分页查询")
+    public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo) {
+        PageResultVo pageResultVo = spuService.queryPage(paramVo);
+
+        return ResponseVo.ok((List<SpuEntity>)pageResultVo.getList());
     }
 
 
@@ -57,8 +73,8 @@ public class SpuController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id){
-		SpuEntity spu = spuService.getById(id);
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id) {
+        SpuEntity spu = spuService.getById(id);
 
         return ResponseVo.ok(spu);
     }
@@ -68,7 +84,7 @@ public class SpuController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SpuVo spu){
+    public ResponseVo<Object> save(@RequestBody SpuVo spu) throws FileNotFoundException {
 //		spuService.save(spu);
         this.spuService.bigSave(spu);
 
@@ -80,8 +96,8 @@ public class SpuController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SpuEntity spu){
-		spuService.updateById(spu);
+    public ResponseVo update(@RequestBody SpuEntity spu) {
+        spuService.updateById(spu);
 
         return ResponseVo.ok();
     }
@@ -91,8 +107,8 @@ public class SpuController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		spuService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        spuService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

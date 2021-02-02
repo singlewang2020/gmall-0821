@@ -9,7 +9,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsConfig {
     @Bean
-    public CorsWebFilter corsWebFilter(){
+    public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 允许跨域方法得我请求域名。 *代表所有域名，但不能携带cookie
         corsConfiguration.addAllowedOrigin("http://manager.gmall.com");
@@ -20,7 +20,7 @@ public class CorsConfig {
         // 允许携带cookie
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
-        configurationSource.registerCorsConfiguration("/**",corsConfiguration);
+        configurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsWebFilter(configurationSource);
     }
 }
