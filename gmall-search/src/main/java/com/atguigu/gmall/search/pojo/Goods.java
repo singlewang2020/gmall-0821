@@ -15,7 +15,7 @@ public class Goods {
 
     // 商品列表所需的字段
     @Id
-    private Long SkuId;
+    private Long skuId;
     @Field(type = FieldType.Keyword,index = false)
     private String defaultImage;
     @Field(type = FieldType.Double)
@@ -26,7 +26,7 @@ public class Goods {
     private String subtitle;
 
     // 排序所需字段
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Long)
     private Long sales = 0l; // 销量
     @Field(type = FieldType.Date)
     private Date createTime; // 新品，spu的创建时间
