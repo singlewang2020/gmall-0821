@@ -24,6 +24,12 @@ public interface GmallPmsApi {
     @GetMapping("pms/category/{id}")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
 
+    @GetMapping("pms/category/parent/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId") Long pid);
+
+    @GetMapping("pms/category/subs/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid")Long pid);
+
     @GetMapping("pms/skuattrvalue/search/{cid}")
     public ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
             @PathVariable("cid") Long cid,
@@ -34,4 +40,5 @@ public interface GmallPmsApi {
             @PathVariable("cid") Long cid,
             @RequestParam("spuId")Long spuId
     );
+
 }

@@ -31,11 +31,12 @@ spring:
           uri: lb://search-service
           predicates:
             - Host=search.gmall.com
-        - id: index-route
+        - id: index-route #首页的同步请求路径
           uri: lb://index-service
           predicates:
             - Host=www.gmall.com, gmall.com
-        - id: index-route2
+          # -Path=/index/** 如果写在一个里面，他们的关系是and关系
+        - id: index-route2 # 首页的异步请求路径
           uri: lb://index-service
           predicates:
             - Path=/index/**

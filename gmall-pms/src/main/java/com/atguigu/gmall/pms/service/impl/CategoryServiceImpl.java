@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,6 +12,8 @@ import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.pms.mapper.CategoryMapper;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.service.CategoryService;
+
+import java.util.List;
 
 
 @Service("categoryService")
@@ -26,4 +29,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         return new PageResultVo(page);
     }
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Override
+    public List<CategoryEntity> queryLv12CatesWithSubsByPid(Long pid) {
+        return this.categoryMapper.queryLvl2CatesWithSubsByPid(pid);
+    }
 }
