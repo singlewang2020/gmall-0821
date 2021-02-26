@@ -52,8 +52,8 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
     @Override
     public List<SkuAttrValueEntity> querySearchAttrValueByCidAndSkuId(Long cid, Long skuId) {
         // 根据cid查询出检索类型的规格参数
-        List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("category_id",cid).eq("search_type",1));
-        if (CollectionUtils.isEmpty(attrEntities)){
+        List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("category_id", cid).eq("search_type", 1));
+        if (CollectionUtils.isEmpty(attrEntities)) {
             return null;
         }
         // 获取检索类型的规格参数的id集和
@@ -66,7 +66,7 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
     public List<SaleAttrValueVo> querySaleAttrsBySpuId(Long spuId) {
         // 查询出spu下所有的sku
         List<SkuEntity> skuEntities = this.skuMapper.selectList(new QueryWrapper<SkuEntity>().eq("spu_Id", spuId));
-        if (CollectionUtils.isEmpty(skuEntities)){
+        if (CollectionUtils.isEmpty(skuEntities)) {
             return null;
         }
         // 搜索所有的skuId
@@ -74,12 +74,12 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
 
         // 查询sku对应的销售属性
         List<SkuAttrValueEntity> skuAttrValueEntities = this.list(new QueryWrapper<SkuAttrValueEntity>().in("sku_id", skuIds).orderByAsc("attr_id"));
-        if (CollectionUtils.isEmpty(skuAttrValueEntities)){
+        if (CollectionUtils.isEmpty(skuAttrValueEntities)) {
             return null;
         }
 
         // 以attrId分组: attrId-Key  List<SkuAttrValueEntity>-value
-        Map<Long, List<SkuAttrValueEntity>> map = skuAttrValueEntities.stream().collect(Collectors.groupingBy(t ->t.getAttrId()));
+        Map<Long, List<SkuAttrValueEntity>> map = skuAttrValueEntities.stream().collect(Collectors.groupingBy(t -> t.getAttrId()));
         // 把map中的每一个元素转换成SaleAttrValueVo
         List<SaleAttrValueVo> saleAttrValueVos = new ArrayList<>();
         map.forEach((attrId, attrValueEntities) -> {
@@ -97,7 +97,7 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
     public String querySaleAttrsMappingSkuIdBySpuId(Long spuId) {
         // 查询出spu下所有的sku
         List<SkuEntity> skuEntities = this.skuMapper.selectList(new QueryWrapper<SkuEntity>().eq("spu_id", spuId));
-        if (CollectionUtils.isEmpty(skuEntities)){
+        if (CollectionUtils.isEmpty(skuEntities)) {
             return null;
         }
         // 搜集所有的skuId

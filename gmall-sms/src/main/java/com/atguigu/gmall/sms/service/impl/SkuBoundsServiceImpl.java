@@ -77,7 +77,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
 
         // 查询积分营销信息
         SkuBoundsEntity skuBoundsEntity = this.getOne(new QueryWrapper<SkuBoundsEntity>().eq("sku_id", skuId));
-        if (skuBoundsEntity !=null){
+        if (skuBoundsEntity != null) {
             ItemSaleVo itemSaleVo = new ItemSaleVo();
             itemSaleVo.setType("积分");
             itemSaleVo.setDesc("送" + skuBoundsEntity.getBuyBounds() + "购物积分送" + skuBoundsEntity.getGrowBounds() + "成长积分");
@@ -86,7 +86,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
 
         // 查询满减营销信息
         SkuFullReductionEntity reductionEntity = this.reductionMapper.selectOne(new QueryWrapper<SkuFullReductionEntity>().eq("sku_id", skuId));
-        if (reductionEntity !=null){
+        if (reductionEntity != null) {
             ItemSaleVo itemSaleVo = new ItemSaleVo();
             itemSaleVo.setType("满减");
             itemSaleVo.setDesc("满" + reductionEntity.getFullPrice() + "减" + reductionEntity.getReducePrice());
@@ -96,7 +96,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
 
         // 查询打折营销信息
         SkuLadderEntity ladderEntity = this.ladderMapper.selectOne(new QueryWrapper<SkuLadderEntity>().eq("sku_id", skuId));
-        if (ladderEntity !=null){
+        if (ladderEntity != null) {
             ItemSaleVo itemSaleVo = new ItemSaleVo();
             itemSaleVo.setType("打折");
             itemSaleVo.setDesc("满" + ladderEntity.getFullCount() + "件打" + ladderEntity.getDiscount().divide(new BigDecimal(10)) + "折");

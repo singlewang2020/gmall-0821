@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * search.gmall.com/search?keywork=手机&brandId=1,2,3&categoryId=225&props=4:8G-12G&props=5:128G-256G-512G&sort=1
- *  &priceFrom=1000&priceTo=2000&store=true&pageNum=1
+ * &priceFrom=1000&priceTo=2000&store=true&pageNum=1
  */
 @Data
 public class SearchParamVo {

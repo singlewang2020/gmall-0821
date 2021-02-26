@@ -66,7 +66,7 @@ public class ItemService {
             ResponseVo<List<CategoryEntity>> catesResponseVo = this.pmsClient.query123CategoriesByCid3(skuEntity.getCategoryId());
             List<CategoryEntity> categoryEntities = catesResponseVo.getData();
             itemVo.setCategories(categoryEntities);
-        },threadPoolExecutor);
+        }, threadPoolExecutor);
 
         // 品牌信息
         CompletableFuture<Void> brandFuture = skuFuture.thenAcceptAsync(skuEntity -> {
@@ -86,28 +86,28 @@ public class ItemService {
                 itemVo.setSpuId(spuEntity.getId());
                 itemVo.setSpuName(spuEntity.getName());
             }
-        },threadPoolExecutor);
+        }, threadPoolExecutor);
 
         // sku的图片列表
         CompletableFuture<Void> imagesFuture = CompletableFuture.runAsync(() -> {
             ResponseVo<List<SkuImagesEntity>> imagesResponseVo = this.pmsClient.queryImagesBySkuId(skuId);
             List<SkuImagesEntity> skuImagesEntities = imagesResponseVo.getData();
             itemVo.setImages(skuImagesEntities);
-        },threadPoolExecutor);
+        }, threadPoolExecutor);
 
         // sku营销信息
         CompletableFuture<Void> salesFuture = CompletableFuture.runAsync(() -> {
             ResponseVo<List<ItemSaleVo>> saleResponseVo = this.smsClient.querySalesBySkuId(skuId);
             List<ItemSaleVo> sales = saleResponseVo.getData();
             itemVo.setSales(sales);
-        },threadPoolExecutor);
+        }, threadPoolExecutor);
 
         // 库存信息
         CompletableFuture<Void> storeFuture = CompletableFuture.runAsync(() -> {
             ResponseVo<List<WareSkuEntity>> wareResponseVo = this.wmsClient.queryWareSkusBySkuId(skuId);
             List<WareSkuEntity> wareSkuEntities = wareResponseVo.getData();
             if (!CollectionUtils.isEmpty(wareSkuEntities)) {
-                itemVo.setStore(wareSkuEntities.stream().anyMatch(wareSkuEntity ->wareSkuEntity.getStock() - wareSkuEntity.getStockLocked() > 0));
+                itemVo.setStore(wareSkuEntities.stream().anyMatch(wareSkuEntity -> wareSkuEntity.getStock() - wareSkuEntity.getStockLocked() > 0));
             }
         }, threadPoolExecutor);
 
@@ -151,8 +151,8 @@ public class ItemService {
         }, threadPoolExecutor);
 
         // 等待所有子任务执行完成，才能返回
-        CompletableFuture.allOf(catesFuture,brandFuture,spuFuture,imagesFuture,salesFuture,storeFuture,
-                saleAttrsFuture,saleAttrFuture,mappingFuture,descFuture,groupFuture).join();
+        CompletableFuture.allOf(catesFuture, brandFuture, spuFuture, imagesFuture, salesFuture, storeFuture,
+                saleAttrsFuture, saleAttrFuture, mappingFuture, descFuture, groupFuture).join();
         return itemVo;
 
     }
@@ -160,93 +160,93 @@ public class ItemService {
     public void generateHtml(ItemVo itemVo) {
         // 初始化上下对象，通过该对象给模板传递渲染所需要的数据
         Context context = new Context();
-        context.setVariable("itemVo",itemVo);
+        context.setVariable("itemVo", itemVo);
         // 初始化文件流：jdk1.8的新语法
-        try(PrintWriter printWriter = new PrintWriter("E:\\workspace\\project-0821\\html\\" + itemVo.getSkuId() + ".html")) {
+        try (PrintWriter printWriter = new PrintWriter("E:\\workspace\\project-0821\\html\\" + itemVo.getSkuId() + ".html")) {
             // 通过模板引擎生成静态页面，1-模板的名称， 2-上下文对象  3-文件流
-            this.templateEngine.process("item",context,printWriter);
+            this.templateEngine.process("item", context, printWriter);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 }
 
-class CompletableFutureDemo{
-     public static void main(String[] args) {
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-            System.out.println("hello CompletableFuture");
-//            int i = 1/0;
-            return "hello supplyAsync";
-        });
-         CompletableFuture<String> future1 = future.thenApplyAsync(t -> {
-             System.out.println("===========thenApplyAsync 1 ===========");
-             try {
-                 TimeUnit.SECONDS.sleep(3);
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-             System.out.println("上一个任务的返回结果集：" + t);
-             return "hello thenApplyAsync 1";
-         });
-         CompletableFuture<Void> future2 = future.thenAcceptAsync(t -> {
-             System.out.println("===========thenApplyAsync 2 ===========");
-             try {
-                 TimeUnit.SECONDS.sleep(4);
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-             System.out.println("上一个任务的返回结果集：" + t);
-//            return "hello thenApplyAsync 2";
-         });
-         CompletableFuture<Void> future3 = future.thenRunAsync(() -> {
-             System.out.println("===========thenApplyAsync 3 ===========");
-             try {
-                 TimeUnit.SECONDS.sleep(3);
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-             System.out.println("上一个任务的返回结果集：");
-//            return "hello thenApplyAsync 3";
-         });
-//        .whenCompleteAsync((t, u) ->{
-//            System.out.println("上一个任务的返回结果集 t: " + t);
-//            System.out.println("上一个任务的异常信息 u: " + u);
-//            System.out.println("执行另一个任务");
-//        }).exceptionally(t ->{
-//            System.out.println("上一个任务任务的异常信息 t: " + t);
-//            System.out.println("异常后的处理任务");
-//            return "hello exceptionally";
+//class CompletableFutureDemo{
+//     public static void main(String[] args) {
+//        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+//            System.out.println("hello CompletableFuture");
+////            int i = 1/0;
+//            return "hello supplyAsync";
 //        });
-
-//         CompletableFuture.allOf(future1,future2,future3).join();
-         CompletableFuture.anyOf(future1,future2,future3).join();
-        try {
-//            System.out.println(future.get());
-            System.out.println("这是主方法的打印");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         try {
-             System.in.read();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-//        FutureTask<String> futureTask = new FutureTask<>(new MyCallable());
-//        new Thread(futureTask).start();
+//         CompletableFuture<String> future1 = future.thenApplyAsync(t -> {
+//             System.out.println("===========thenApplyAsync 1 ===========");
+//             try {
+//                 TimeUnit.SECONDS.sleep(3);
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+//             System.out.println("上一个任务的返回结果集：" + t);
+//             return "hello thenApplyAsync 1";
+//         });
+//         CompletableFuture<Void> future2 = future.thenAcceptAsync(t -> {
+//             System.out.println("===========thenApplyAsync 2 ===========");
+//             try {
+//                 TimeUnit.SECONDS.sleep(4);
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+//             System.out.println("上一个任务的返回结果集：" + t);
+////            return "hello thenApplyAsync 2";
+//         });
+//         CompletableFuture<Void> future3 = future.thenRunAsync(() -> {
+//             System.out.println("===========thenApplyAsync 3 ===========");
+//             try {
+//                 TimeUnit.SECONDS.sleep(3);
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+//             System.out.println("上一个任务的返回结果集：");
+////            return "hello thenApplyAsync 3";
+//         });
+////        .whenCompleteAsync((t, u) ->{
+////            System.out.println("上一个任务的返回结果集 t: " + t);
+////            System.out.println("上一个任务的异常信息 u: " + u);
+////            System.out.println("执行另一个任务");
+////        }).exceptionally(t ->{
+////            System.out.println("上一个任务任务的异常信息 t: " + t);
+////            System.out.println("异常后的处理任务");
+////            return "hello exceptionally";
+////        });
+//
+////         CompletableFuture.allOf(future1,future2,future3).join();
+//         CompletableFuture.anyOf(future1,future2,future3).join();
 //        try {
-//            System.out.println(futureTask.get());
-//            System.out.println("这是主线程的打印。。。");
+////            System.out.println(future.get());
+//            System.out.println("这是主方法的打印");
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-    }
-}
+//         try {
+//             System.in.read();
+//         } catch (IOException e) {
+//             e.printStackTrace();
+//         }
+////        FutureTask<String> futureTask = new FutureTask<>(new MyCallable());
+////        new Thread(futureTask).start();
+////        try {
+////            System.out.println(futureTask.get());
+////            System.out.println("这是主线程的打印。。。");
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////        }
+//    }
+//}
 
-class MyCallable implements Callable<String> {
-
-    @Override
-    public String call() throws Exception {
-        System.out.println("这是使用Callable初始化了多线程程序");
-        return "hello callable......";
-    }
-}
+//class MyCallable implements Callable<String> {
+//
+//    @Override
+//    public String call() throws Exception {
+//        System.out.println("这是使用Callable初始化了多线程程序");
+//        return "hello callable......";
+//    }
+//}

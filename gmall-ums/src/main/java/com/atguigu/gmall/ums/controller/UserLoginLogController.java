@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atguigu.gmall.ums.entity.UserLoginLogEntity;
@@ -39,7 +38,7 @@ public class UserLoginLogController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryUserLoginLogByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryUserLoginLogByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = userLoginLogService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +50,8 @@ public class UserLoginLogController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<UserLoginLogEntity> queryUserLoginLogById(@PathVariable("id") Long id){
-		UserLoginLogEntity userLoginLog = userLoginLogService.getById(id);
+    public ResponseVo<UserLoginLogEntity> queryUserLoginLogById(@PathVariable("id") Long id) {
+        UserLoginLogEntity userLoginLog = userLoginLogService.getById(id);
 
         return ResponseVo.ok(userLoginLog);
     }
@@ -62,8 +61,8 @@ public class UserLoginLogController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody UserLoginLogEntity userLoginLog){
-		userLoginLogService.save(userLoginLog);
+    public ResponseVo<Object> save(@RequestBody UserLoginLogEntity userLoginLog) {
+        userLoginLogService.save(userLoginLog);
 
         return ResponseVo.ok();
     }
@@ -73,8 +72,8 @@ public class UserLoginLogController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody UserLoginLogEntity userLoginLog){
-		userLoginLogService.updateById(userLoginLog);
+    public ResponseVo update(@RequestBody UserLoginLogEntity userLoginLog) {
+        userLoginLogService.updateById(userLoginLog);
 
         return ResponseVo.ok();
     }
@@ -84,8 +83,8 @@ public class UserLoginLogController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		userLoginLogService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        userLoginLogService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

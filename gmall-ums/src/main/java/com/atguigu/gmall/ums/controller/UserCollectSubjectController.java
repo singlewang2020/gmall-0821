@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atguigu.gmall.ums.entity.UserCollectSubjectEntity;
@@ -39,7 +38,7 @@ public class UserCollectSubjectController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryUserCollectSubjectByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryUserCollectSubjectByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = userCollectSubjectService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +50,8 @@ public class UserCollectSubjectController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<UserCollectSubjectEntity> queryUserCollectSubjectById(@PathVariable("id") Long id){
-		UserCollectSubjectEntity userCollectSubject = userCollectSubjectService.getById(id);
+    public ResponseVo<UserCollectSubjectEntity> queryUserCollectSubjectById(@PathVariable("id") Long id) {
+        UserCollectSubjectEntity userCollectSubject = userCollectSubjectService.getById(id);
 
         return ResponseVo.ok(userCollectSubject);
     }
@@ -62,8 +61,8 @@ public class UserCollectSubjectController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody UserCollectSubjectEntity userCollectSubject){
-		userCollectSubjectService.save(userCollectSubject);
+    public ResponseVo<Object> save(@RequestBody UserCollectSubjectEntity userCollectSubject) {
+        userCollectSubjectService.save(userCollectSubject);
 
         return ResponseVo.ok();
     }
@@ -73,8 +72,8 @@ public class UserCollectSubjectController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody UserCollectSubjectEntity userCollectSubject){
-		userCollectSubjectService.updateById(userCollectSubject);
+    public ResponseVo update(@RequestBody UserCollectSubjectEntity userCollectSubject) {
+        userCollectSubjectService.updateById(userCollectSubject);
 
         return ResponseVo.ok();
     }
@@ -84,8 +83,8 @@ public class UserCollectSubjectController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		userCollectSubjectService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        userCollectSubjectService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

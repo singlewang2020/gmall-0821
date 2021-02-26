@@ -32,9 +32,9 @@ public class SpuAttrValueController {
     @GetMapping("search/{cid}")
     public ResponseVo<List<SpuAttrValueEntity>> querySearchAttrValuesByCidAndSpuId(
             @PathVariable("cid") Long cid,
-            @RequestParam("spuId")Long spuId
-    ){
-        List<SpuAttrValueEntity> spuAttrValueEntities = this.spuAttrValueService.querySearchAttrValuesByCidAndSpuId(cid,spuId);
+            @RequestParam("spuId") Long spuId
+    ) {
+        List<SpuAttrValueEntity> spuAttrValueEntities = this.spuAttrValueService.querySearchAttrValuesByCidAndSpuId(cid, spuId);
         return ResponseVo.ok(spuAttrValueEntities);
     }
 

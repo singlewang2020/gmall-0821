@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SkuAttrValueServiceImplTest {
     @Autowired
     private SkuAttrValueService skuAttrValueService;
+
     @Test
     void queryPage() {
     }

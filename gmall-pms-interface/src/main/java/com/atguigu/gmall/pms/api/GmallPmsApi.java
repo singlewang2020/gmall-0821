@@ -32,40 +32,42 @@ public interface GmallPmsApi {
     public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId") Long pid);
 
     @GetMapping("pms/category/subs/{pid}")
-    public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid")Long pid);
+    public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid") Long pid);
 
     @GetMapping("pms/category/all/{cid}")
-    public ResponseVo<List<CategoryEntity>> query123CategoriesByCid3(@PathVariable("cid")Long cid);
+    public ResponseVo<List<CategoryEntity>> query123CategoriesByCid3(@PathVariable("cid") Long cid);
 
     @GetMapping("pms/skuattrvalue/search/{cid}")
     public ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
             @PathVariable("cid") Long cid,
-            @RequestParam("skuId")Long skuId
+            @RequestParam("skuId") Long skuId
     );
+
     @GetMapping("pms/spuattrvalue/search/{cid}")
     public ResponseVo<List<SpuAttrValueEntity>> querySearchAttrValuesByCidAndSpuId(
             @PathVariable("cid") Long cid,
-            @RequestParam("spuId")Long spuId
+            @RequestParam("spuId") Long spuId
     );
 
     @GetMapping("pms/skuimages/sku/{skuId}")
-    public ResponseVo<List<SkuImagesEntity>> queryImagesBySkuId(@PathVariable("skuId")Long skuId);
+    public ResponseVo<List<SkuImagesEntity>> queryImagesBySkuId(@PathVariable("skuId") Long skuId);
 
     @GetMapping("pms/skuattrvalue/spu/{spuId}")
-    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable("spuId")Long spuId);
+    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable("spuId") Long spuId);
 
     @GetMapping("pms/skuattrvalue/sku/{skuId}")
-    public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId")Long skuId);
+    public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId") Long skuId);
 
     @GetMapping("pms/spudesc/{spuId}")
     public ResponseVo<SpuDescEntity> querySpuDescById(@PathVariable("spuId") Long spuId);
 
     @GetMapping("pms/attrgroup/category/spuId/skuId/{cid}")
     public ResponseVo<List<ItemGroupVo>> queryGroupWithAttrValuesBy(
-            @PathVariable("cid")Long cid,
-            @RequestParam("spuId")Long spuId,
-            @RequestParam("skuId")Long skuId
+            @PathVariable("cid") Long cid,
+            @RequestParam("spuId") Long spuId,
+            @RequestParam("skuId") Long skuId
     );
+
     @GetMapping("pms/skuattrvalue/spu/mapping/{spuId}")
-    public ResponseVo<String> querySaleAttrsMappingSkuIdBySpuId(@PathVariable("spuId")Long spuId);
+    public ResponseVo<String> querySaleAttrsMappingSkuIdBySpuId(@PathVariable("spuId") Long spuId);
 }

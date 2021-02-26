@@ -22,21 +22,21 @@ class GmallIndexApplicationTests {
 //    private StringRedisTemplate redisTemplate;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         this.redisTemplate.setKeySerializer(new StringRedisSerializer());
         this.redisTemplate.setValueSerializer(new StringRedisSerializer());
     }
 
     @Test
     void contextLoads() {
-        this.redisTemplate.opsForValue().set("test","柳岩");
+        this.redisTemplate.opsForValue().set("test", "柳岩");
         System.out.println(this.redisTemplate.opsForValue().get("test"));
     }
 
     @Test
-    void testRedissonBloomFilter(){
+    void testRedissonBloomFilter() {
         RBloomFilter<Object> bloomFilter = this.redissonClient.getBloomFilter("bloomFilter");
-        bloomFilter.tryInit(20,0.3);
+        bloomFilter.tryInit(20, 0.3);
         bloomFilter.add("1");
         bloomFilter.add("2");
         bloomFilter.add("3");
@@ -57,20 +57,19 @@ class GmallIndexApplicationTests {
         bloomFilter.add("18");
         bloomFilter.add("19");
 
-        System.out.println("1: "+ bloomFilter.contains("1"));
-        System.out.println("3: "+ bloomFilter.contains("3"));
-        System.out.println("5: "+ bloomFilter.contains("5"));
-        System.out.println("11: "+ bloomFilter.contains("11"));
-        System.out.println("12: "+ bloomFilter.contains("12"));
-        System.out.println("13: "+ bloomFilter.contains("13"));
-        System.out.println("14: "+ bloomFilter.contains("14"));
-        System.out.println("15: "+ bloomFilter.contains("15"));
-        System.out.println("16: "+ bloomFilter.contains("16"));
-        System.out.println("22: "+ bloomFilter.contains("22"));
-        System.out.println("21: "+ bloomFilter.contains("21"));
-        System.out.println("20: "+ bloomFilter.contains("20"));
+        System.out.println("1: " + bloomFilter.contains("1"));
+        System.out.println("3: " + bloomFilter.contains("3"));
+        System.out.println("5: " + bloomFilter.contains("5"));
+        System.out.println("11: " + bloomFilter.contains("11"));
+        System.out.println("12: " + bloomFilter.contains("12"));
+        System.out.println("13: " + bloomFilter.contains("13"));
+        System.out.println("14: " + bloomFilter.contains("14"));
+        System.out.println("15: " + bloomFilter.contains("15"));
+        System.out.println("16: " + bloomFilter.contains("16"));
+        System.out.println("22: " + bloomFilter.contains("22"));
+        System.out.println("21: " + bloomFilter.contains("21"));
+        System.out.println("20: " + bloomFilter.contains("20"));
     }
-
 
 
 }

@@ -20,8 +20,8 @@ import java.util.Map;
 public class OssController {
     @GetMapping("policy")
     public ResponseVo<Object> policy() {
-        String accessId = ""; // 请填写您的AccessKeyId。
-        String accessKey = ""; // 请填写您的AccessKeySecret。
+        String accessId = "LTAI4GCHSHTYXGBiMiccdUBT"; // 请填写您的AccessKeyId。
+        String accessKey = "lzYAuLFuTxjKzM1Fevz8hB1AR3N8J8"; // 请填写您的AccessKeySecret。
         String endpoint = "oss-cn-shanghai.aliyuncs.com"; // 请填写您的 endpoint。
         String bucket = "sh200911-guli-file"; // 请填写您的 bucketname 。
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint

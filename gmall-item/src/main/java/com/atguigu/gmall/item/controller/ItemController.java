@@ -20,10 +20,10 @@ public class ItemController {
     private ThreadPoolExecutor threadPoolExecutor;
 
     @GetMapping("{skuId}.html")
-    public String toItem(@PathVariable("skuId")Long skuId, Model model){
+    public String toItem(@PathVariable("skuId") Long skuId, Model model) {
         ItemVo itemVo = this.itemService.loadData(skuId);
-        model.addAttribute("itemVo",itemVo);
-        threadPoolExecutor.execute(() ->{
+        model.addAttribute("itemVo", itemVo);
+        threadPoolExecutor.execute(() -> {
             // 异步生成静态页面
             itemService.generateHtml(itemVo);
         });

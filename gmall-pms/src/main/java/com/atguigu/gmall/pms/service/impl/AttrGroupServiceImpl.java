@@ -66,7 +66,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
     public List<ItemGroupVo> queryGroupWithAttrValuesBy(Long cid, Long spuId, Long skuId) {
 // 根据分类id查询出所有的分组信息
         List<AttrGroupEntity> groupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("category_id", cid));
-        if (CollectionUtils.isEmpty(groupEntities)){
+        if (CollectionUtils.isEmpty(groupEntities)) {
             return null;
         }
 
@@ -74,14 +74,14 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
             ItemGroupVo groupVo = new ItemGroupVo();
             // 获取每个分组下的规格参数列表 --> attrIds
             List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("group_id", groupEntity.getId()));
-            if (!CollectionUtils.isEmpty(attrEntities)){
+            if (!CollectionUtils.isEmpty(attrEntities)) {
                 // 获取attrId的集合
                 List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
 
                 List<AttrValueVo> attrValueVos = new ArrayList<>();
                 // 查询基本的规格参数及值
                 List<SpuAttrValueEntity> spuAttrValueEntities = this.attrValueMapper.selectList(new QueryWrapper<SpuAttrValueEntity>().in("attr_id", attrIds).eq("spu_id", spuId));
-                if (!CollectionUtils.isEmpty(spuAttrValueEntities)){
+                if (!CollectionUtils.isEmpty(spuAttrValueEntities)) {
                     attrValueVos.addAll(spuAttrValueEntities.stream().map(spuAttrValueEntity -> {
                         AttrValueVo attrValueVo = new AttrValueVo();
                         BeanUtils.copyProperties(spuAttrValueEntity, attrValueVo);
@@ -91,7 +91,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
 
                 // 查询销售的规格参数及值
                 List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueMapper.selectList(new QueryWrapper<SkuAttrValueEntity>().in("attr_id", attrIds).eq("sku_id", skuId));
-                if (!CollectionUtils.isEmpty(skuAttrValueEntities)){
+                if (!CollectionUtils.isEmpty(skuAttrValueEntities)) {
                     attrValueVos.addAll(skuAttrValueEntities.stream().map(skuAttrValueEntity -> {
                         AttrValueVo attrValueVo = new AttrValueVo();
                         BeanUtils.copyProperties(skuAttrValueEntity, attrValueVo);

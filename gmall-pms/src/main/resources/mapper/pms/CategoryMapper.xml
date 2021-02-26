@@ -15,7 +15,8 @@
     <resultMap id="categoryMap" type="CategoryEntity" autoMapping="true">
         <!-- 二级分类的主键映射关系 -->
         <id column="id" property="id"/>
-        <collection property="subs" javaType="List" ofType="CategoryEntity" select="queryLvl2CatesWithSubsByPid" column="id">
+        <collection property="subs" javaType="List" ofType="CategoryEntity" select="queryLvl2CatesWithSubsByPid"
+                    column="id">
         </collection>
     </resultMap>
     <!-- 查询结果集的封装在mybatis中有两种方式：

@@ -21,7 +21,7 @@ public class DistributedLock {
 
     private Timer timer;
 
-    public Boolean tryLock(String lockName, String uuid, Integer expire){
+    public Boolean tryLock(String lockName, String uuid, Integer expire) {
         String script = "if(redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1) then " +
                 "   redis.call('hincrby', KEYS[1], ARGV[1], 1) " +
                 "   redis.call('expire', KEYS[1], ARGV[2]) " +
@@ -29,7 +29,7 @@ public class DistributedLock {
                 "else " +
                 "   return 0 " +
                 "end";
-        if (!this.redisTemplate.execute(new DefaultRedisScript<>(script,Boolean.class), Arrays.asList(lockName), uuid,expire.toString())){
+        if (!this.redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(lockName), uuid, expire.toString())) {
             try {
                 Thread.sleep(50);
                 tryLock(lockName, uuid, expire);
@@ -38,13 +38,12 @@ public class DistributedLock {
             }
         }
         // 开启定时子任务线程自动续费
-        renewExpire(lockName,uuid,expire);
+        renewExpire(lockName, uuid, expire);
         return true;
     }
 
 
-
-    public void unlock(String lockName,String uuid){
+    public void unlock(String lockName, String uuid) {
         // 返回值为nil代表要解的锁不存在或者要解别人的锁
         // 返回值为0代表出来了一次
         // 返回值为1代表解锁成功
@@ -56,16 +55,16 @@ public class DistributedLock {
                 "   return 0 " +
                 "end";
         // 此处返回值类型不要使用bool，因为nil在布尔类型中会被解析成false
-        Long flag = this.redisTemplate.execute(new DefaultRedisScript<>(script,Long.class), Arrays.asList(lockName),uuid);
-        if (flag == null){
-            log.error("要解的锁不存在，或者在尝试解除别人的锁。锁的名称：{}，锁的uuid：{}",lockName,uuid);
-        }else if (flag == 1){
+        Long flag = this.redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(lockName), uuid);
+        if (flag == null) {
+            log.error("要解的锁不存在，或者在尝试解除别人的锁。锁的名称：{}，锁的uuid：{}", lockName, uuid);
+        } else if (flag == 1) {
             // 解锁成功，取消定时任务
             timer.cancel();
         }
     }
 
-    private void renewExpire(String lockName,String uuid,Integer expire){
+    private void renewExpire(String lockName, String uuid, Integer expire) {
         String script = "if(redis.call('hexists', KEYS[1], ARGV[1]) == 1) then " +
                 "   return redis.call('expire', KEYS[1], ARGV[2]) " +
                 "else " +
@@ -77,9 +76,9 @@ public class DistributedLock {
             public void run() {
                 //
                 //redisTemplate.expire(lockName, expire, TimeUnit.SECONDS);
-                redisTemplate.execute(new DefaultRedisScript<>(script ,Boolean.class),Arrays.asList(lockName),uuid,expire.toString());
+                redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(lockName), uuid, expire.toString());
             }
-        },expire*1000/3,expire*1000/3);
+        }, expire * 1000 / 3, expire * 1000 / 3);
     }
 //    public static void main(String[] args){
 //        // 定时器

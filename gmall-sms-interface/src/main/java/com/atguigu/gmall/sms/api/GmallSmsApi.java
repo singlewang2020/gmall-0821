@@ -15,5 +15,5 @@ public interface GmallSmsApi {
     public ResponseVo saveSales(@RequestBody SkuSaleVo saleVo);
 
     @GetMapping("sms/skubounds/sales/{skuId}")
-    public ResponseVo<List<ItemSaleVo>> querySalesBySkuId(@PathVariable("skuId")Long skuId);
+    public ResponseVo<List<ItemSaleVo>> querySalesBySkuId(@PathVariable("skuId") Long skuId);
 }

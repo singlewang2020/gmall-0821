@@ -32,7 +32,7 @@ public class SpuDescServiceImpl extends ServiceImpl<SpuDescMapper, SpuDescEntity
         return new PageResultVo(page);
     }
 
-//    (propagation = Propagation.REQUIRES_NEW)
+    //    (propagation = Propagation.REQUIRES_NEW)
     @Transactional
     public void saveSpuDesc(SpuVo spu, Long spuId) {
         List<String> spuImages = spu.getSpuImages();

@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 public class ThreadPoolConfig {
     @Bean
     public ThreadPoolExecutor threadPoolExecutor(
-        @Value("${thread.pool.coreSize}") Integer coreSize,
-        @Value("${thread.pool.maxSize}") Integer maxSize,
-        @Value("${thread.pool.keepAlive}") Integer keepAlive,
-        @Value("${thread.pool.blockingQueueSize}") Integer blockingQueueSize
-    ){
-        return new ThreadPoolExecutor(coreSize,maxSize,keepAlive, TimeUnit.SECONDS,new ArrayBlockingQueue<>(blockingQueueSize));
+            @Value("${thread.pool.coreSize}") Integer coreSize,
+            @Value("${thread.pool.maxSize}") Integer maxSize,
+            @Value("${thread.pool.keepAlive}") Integer keepAlive,
+            @Value("${thread.pool.blockingQueueSize}") Integer blockingQueueSize
+    ) {
+        return new ThreadPoolExecutor(coreSize, maxSize, keepAlive, TimeUnit.SECONDS, new ArrayBlockingQueue<>(blockingQueueSize));
     }
 }

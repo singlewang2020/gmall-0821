@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atguigu.gmall.ums.entity.IntegrationHistoryEntity;
@@ -39,7 +38,7 @@ public class IntegrationHistoryController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryIntegrationHistoryByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryIntegrationHistoryByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = integrationHistoryService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +50,8 @@ public class IntegrationHistoryController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<IntegrationHistoryEntity> queryIntegrationHistoryById(@PathVariable("id") Long id){
-		IntegrationHistoryEntity integrationHistory = integrationHistoryService.getById(id);
+    public ResponseVo<IntegrationHistoryEntity> queryIntegrationHistoryById(@PathVariable("id") Long id) {
+        IntegrationHistoryEntity integrationHistory = integrationHistoryService.getById(id);
 
         return ResponseVo.ok(integrationHistory);
     }
@@ -62,8 +61,8 @@ public class IntegrationHistoryController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody IntegrationHistoryEntity integrationHistory){
-		integrationHistoryService.save(integrationHistory);
+    public ResponseVo<Object> save(@RequestBody IntegrationHistoryEntity integrationHistory) {
+        integrationHistoryService.save(integrationHistory);
 
         return ResponseVo.ok();
     }
@@ -73,8 +72,8 @@ public class IntegrationHistoryController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody IntegrationHistoryEntity integrationHistory){
-		integrationHistoryService.updateById(integrationHistory);
+    public ResponseVo update(@RequestBody IntegrationHistoryEntity integrationHistory) {
+        integrationHistoryService.updateById(integrationHistory);
 
         return ResponseVo.ok();
     }
@@ -84,8 +83,8 @@ public class IntegrationHistoryController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		integrationHistoryService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        integrationHistoryService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

@@ -10,19 +10,19 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Document(indexName = "goods",type = "info",shards = 3, replicas = 2)
+@Document(indexName = "goods", type = "info", shards = 3, replicas = 2)
 public class Goods {
 
     // 商品列表所需的字段
     @Id
     private Long skuId;
-    @Field(type = FieldType.Keyword,index = false)
+    @Field(type = FieldType.Keyword, index = false)
     private String defaultImage;
     @Field(type = FieldType.Double)
     private Double price;
-    @Field(type = FieldType.Text, analyzer ="ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String title;
-    @Field(type = FieldType.Keyword,index = false)
+    @Field(type = FieldType.Keyword, index = false)
     private String subtitle;
 
     // 排序所需字段
@@ -55,9 +55,6 @@ public class Goods {
      */
     @Field(type = FieldType.Nested)
     private List<SearchAttrValue> searchAtts;
-
-
-
 
 
 }

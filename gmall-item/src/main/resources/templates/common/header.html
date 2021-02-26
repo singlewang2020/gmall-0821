@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 
@@ -13,8 +13,12 @@
                 <div class="shortcut">
                     <ul class="fl">
                         <li class="f-item">谷粒欢迎您！</li>
-                        <li  v-if="nickName == ''" class="f-item"><span><a href="javascript:" @click="login()">登录</a></span>　<span><a href="#">免费注册</a></span></li>
-                        <li  v-if="nickName != ''" class="f-item"><span>{{nickName}}</span>　<span><a href="javascript:" @click="logout">退出</a></span></li>
+                        <li v-if="nickName == ''" class="f-item"><span><a href="javascript:"
+                                                                          @click="login()">登录</a></span>　<span><a
+                                href="#">免费注册</a></span></li>
+                        <li v-if="nickName != ''" class="f-item"><span>{{nickName}}</span>　<span><a href="javascript:"
+                                                                                                    @click="logout">退出</a></span>
+                        </li>
                     </ul>
                     <div class="fr typelist">
                         <ul class="types">
@@ -72,8 +76,10 @@
                             <form action="" class="sui-form form-inline">
                                 <!--searchAutoComplete-->
                                 <div class="input-append">
-                                    <input id="keyword" type="text" v-model="keyword" class="input-error input-xxlarge" />
-                                    <button class="sui-btn btn-xlarge btn-danger" @click="search()" type="button">搜索</button>
+                                    <input id="keyword" type="text" v-model="keyword"
+                                           class="input-error input-xxlarge"/>
+                                    <button class="sui-btn btn-xlarge btn-danger" @click="search()" type="button">搜索
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -100,18 +106,18 @@
             methods: {
                 showInfo() {
                     // debugger
-                    if(auth.getUserInfo()) {
+                    if (auth.getUserInfo()) {
                         this.nickName = auth.getUserInfo();
                     }
                 },
 
                 search() {
-                    if(this.keyword == null) this.keyword = ''
+                    if (this.keyword == null) this.keyword = ''
                     window.location.href = 'http://search.gmall.com/search?keyword=' + this.keyword
                 },
 
                 login() {
-                    window.location.href = 'http://sso.gmall.com/toLogin.html?returnUrl='+window.location.href
+                    window.location.href = 'http://sso.gmall.com/toLogin.html?returnUrl=' + window.location.href
                 },
 
                 logout() {

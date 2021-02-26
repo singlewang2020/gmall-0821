@@ -42,7 +42,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     public List<CategoryEntity> query123CategoriesByCid3(Long cid) {
         // 根据三级分类的id查询三级分类
         CategoryEntity categoryEntity3 = this.getById(cid);
-        if (categoryEntity3 == null){
+        if (categoryEntity3 == null) {
             return null;
         }
         // 根据三级分类的id查询二级分类
@@ -51,6 +51,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         // 根据二级分类的id查询一级分类
         CategoryEntity categoryEntity1 = this.getById(categoryEntity2.getParentId());
 
-        return Arrays.asList(categoryEntity1,categoryEntity2,categoryEntity3);
+        return Arrays.asList(categoryEntity1, categoryEntity2, categoryEntity3);
     }
 }

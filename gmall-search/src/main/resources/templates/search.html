@@ -16,13 +16,13 @@
     <script src="http://static.gmall.com/js/request.js"></script>
 </head>
 
-<script >
+<script>
     $(function () {
-        $('.brand').hover(function(){
+        $('.brand').hover(function () {
             /*显示品牌名称*/
             $(this).children("div").show()
             $(this).children("img").hide()
-        },function(){
+        }, function () {
             // alert("come on!")
             $(this).children("div").hide()
             $(this).children("img").show()
@@ -39,7 +39,8 @@
 
 <!--list-content-->
 <!-- 每次修改了搜索、过滤、排序条件之后，应该展示第一页信息 -->
-<div class="main" th:object="${response}" th:with="location=${'/search?'+ #strings.replace(#httpServletRequest.queryString, '&pageNum=' + searchParam.pageNum, '')}" >
+<div class="main" th:object="${response}"
+     th:with="location=${'/search?'+ #strings.replace(#httpServletRequest.queryString, '&pageNum=' + searchParam.pageNum, '')}">
     <div class="py-container">
         <!--bread 1.面包屑-->
         <div class="bread">
@@ -81,7 +82,8 @@
         <div class="clearfix selector">
             <!-- 品牌过滤：只有一个品牌或者已经选择了品牌时，不显示品牌过滤 -->
             <!-- 聚合出的品牌不为空；并且聚合出的品牌个数大于1；并且查询参数中没有品牌（用户没有选择品牌的情况下）-->
-            <div class="type-wrap logo" th:if="${response.brands != null && response.brands.size() > 1 && searchParam.brandId == null}">
+            <div class="type-wrap logo"
+                 th:if="${response.brands != null && response.brands.size() > 1 && searchParam.brandId == null}">
                 <!-- 过滤名称写死，就是品牌 -->
                 <div class="fl key brand">品牌</div>
                 <div class="value logos">
@@ -89,7 +91,8 @@
                         <!-- 遍历品牌集合 -->
                         <li th:each="brand : *{brands}">
                             <!-- 选择品牌后把品牌id拼接到地址栏 -->
-                            <a class="brand" style="text-decoration: none;color: red;" th:href="@{${location + '&brandId=' + brand.id}}" th:title="${brand.name}" >
+                            <a class="brand" style="text-decoration: none;color: red;"
+                               th:href="@{${location + '&brandId=' + brand.id}}" th:title="${brand.name}">
                                 <!-- 渲染品牌logo及品牌名称，通过js控制log和名称的切换 -->
                                 <img th:src="${brand.logo}">
                                 <div th:text="${brand.name}" style="display: none"></div>
@@ -105,7 +108,8 @@
             </div>
             <!-- 分类过滤：只有一个分类或者已经选择了分类时，不显示分类过滤 -->
             <!-- 聚合出的分类不为空；并聚合出的分类的个数大于1；并且查询参数中没有分类（用户没有选择分类的情况下）-->
-            <div class="type-wrap" th:if="${response.categories != null && response.categories.size() > 1 && searchParam.categoryId == null}">
+            <div class="type-wrap"
+                 th:if="${response.categories != null && response.categories.size() > 1 && searchParam.categoryId == null}">
                 <!-- 过滤名称写死，就是分类 -->
                 <div class="fl key">分类</div>
                 <div class="fl value">
@@ -123,7 +127,7 @@
             <!-- 遍历所有的过滤的规格参数 -->
             <!-- 当前的规格参数值得聚合结果集不为空；并且个数大于1；并且用户没有选择过这个规格参数 -->
             <div class="type-wrap" th:each="filter : *{filters}"
-                 th:if="${filter.attrValues != null && filter.attrValues.size() > 1 && not (#strings.contains(location, ',' + filter.attrId + ':') || #strings.contains(location, '=' + filter.attrId + ':'))}" >
+                 th:if="${filter.attrValues != null && filter.attrValues.size() > 1 && not (#strings.contains(location, ',' + filter.attrId + ':') || #strings.contains(location, '=' + filter.attrId + ':'))}">
                 <!-- 规格参数名 -->
                 <div class="fl key" th:text="${filter.attrName}">显示屏尺寸</div>
                 <div class="fl value">
@@ -142,7 +146,7 @@
         <div class="details">
             <!-- 排序条件 -->
             <div class="sui-navbar">
-                <div class="navbar-inner filter" >
+                <div class="navbar-inner filter">
                     <ul class="sui-nav">
                         <!-- 排序sort=0时，该li标签处于活性状态 -->
                         <li th:class="${searchParam.sort == 0 ? 'active' : ''}">
@@ -186,7 +190,8 @@
                             <!-- 商品标题 -->
                             <div class="attr">
                                 <!-- 点击标题跳转到商品详情页，鼠标放在标题上展示副标题 -->
-                                <a target="_blank" th:href="@{http://item.gmall.com/{id}.html(id=${goods.skuId})}" th:title="${goods.subtitle}" th:utext="${goods.title}">Apple苹果iPhone
+                                <a target="_blank" th:href="@{http://item.gmall.com/{id}.html(id=${goods.skuId})}"
+                                   th:title="${goods.subtitle}" th:utext="${goods.title}">Apple苹果iPhone
                                     6s (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s
                                     (A1699)</a>
                             </div>
@@ -217,7 +222,8 @@
                             <a href="javascript:void(0);">上一页</a>
                         </li>
                         <!-- 渲染页码 -->
-                        <li th:each="i : ${#numbers.sequence(1, totalPage)}" th:class="${i == searchParam.pageNum } ? 'active' : ''">
+                        <li th:each="i : ${#numbers.sequence(1, totalPage)}"
+                            th:class="${i == searchParam.pageNum } ? 'active' : ''">
                             <a th:href="|${location}&pageNum=${i}|"><span th:text="${i}"></span></a>
                         </li>
                         <!-- 渲染下一页，逻辑类似于上一页 -->
@@ -449,7 +455,7 @@
 <script th:inline="javascript">
     let urlParams = decodeURI([[${#httpServletRequest.queryString}]]);
 
-    function cancelProp(prop){
+    function cancelProp(prop) {
         urlParams = urlParams.replace('&props=' + prop, '');
         window.location = '/search?' + urlParams;
     }

@@ -84,7 +84,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         return new PageResultVo(page);
     }
 
-//    (propagation = Propagation.REQUIRED)
+    //    (propagation = Propagation.REQUIRED)
 //    @Transactional(noRollbackFor = ArithmeticException.class , rollbackFor = FileNotFoundException.class)
 //    @Transactional(noRollbackFor = ArithmeticException.class , rollbackFor = FileNotFoundException.class)
 //    @Transactional(timeout = 3)
@@ -112,7 +112,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         saveBaseAttr(spu, spuId);
         //2. 再保存sku相关信息
         saveSkuInfo(spu, spuId);
-        this.rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE","item.insert",spuId);
+        this.rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE", "item.insert", spuId);
 //        int i = 1/0;
 
     }

@@ -53,7 +53,7 @@ public class ItemVo {
 
     // 17.销售属性组合和skuId的映射关系
     // {'暗夜黑,8G,128G': 10, '白天白,12G,128G': 11}
-    private String  skuJsons;
+    private String skuJsons;
 
     //18.商品海报信息
     private List<String> spuImages;

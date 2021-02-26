@@ -39,14 +39,14 @@ public class SpuAttrValueServiceImpl extends ServiceImpl<SpuAttrValueMapper, Spu
     @Override
     public List<SpuAttrValueEntity> querySearchAttrValuesByCidAndSpuId(Long cid, Long spuId) {
         // 根据cid查询检索类型的规格参数
-        List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("category_id",cid).eq("search_type",1));
-        if(CollectionUtils.isEmpty(attrEntities)){
+        List<AttrEntity> attrEntities = this.attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("category_id", cid).eq("search_type", 1));
+        if (CollectionUtils.isEmpty(attrEntities)) {
             return null;
         }
         // 获取检索类型的规格参数的id集合
         List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
         // 根据spuid和attrIds查询出基本类型的检索规格参数值
-        return this.list(new QueryWrapper<SpuAttrValueEntity>().eq("spu_id",spuId).in("attr_id",attrIds));
+        return this.list(new QueryWrapper<SpuAttrValueEntity>().eq("spu_id", spuId).in("attr_id", attrIds));
     }
 
 }

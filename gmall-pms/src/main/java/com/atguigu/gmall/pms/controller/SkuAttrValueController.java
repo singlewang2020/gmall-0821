@@ -31,19 +31,19 @@ public class SkuAttrValueController {
     private SkuAttrValueService skuAttrValueService;
 
     @GetMapping("spu/mapping/{spuId}")
-    public ResponseVo<String> querySaleAttrsMappingSkuIdBySpuId(@PathVariable("spuId")Long spuId){
+    public ResponseVo<String> querySaleAttrsMappingSkuIdBySpuId(@PathVariable("spuId") Long spuId) {
         String json = this.skuAttrValueService.querySaleAttrsMappingSkuIdBySpuId(spuId);
         return ResponseVo.ok(json);
     }
 
     @GetMapping("sku/{skuId}")
-    public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId")Long skuId){
+    public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId") Long skuId) {
         List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueService.list(new QueryWrapper<SkuAttrValueEntity>().eq("sku_id", skuId));
         return ResponseVo.ok(skuAttrValueEntities);
     }
 
     @GetMapping("spu/{spuId}")
-    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable("spuId")Long spuId){
+    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable("spuId") Long spuId) {
         List<SaleAttrValueVo> saleAttrValueVos = this.skuAttrValueService.querySaleAttrsBySpuId(spuId);
         return ResponseVo.ok(saleAttrValueVos);
     }
@@ -51,11 +51,12 @@ public class SkuAttrValueController {
     @GetMapping("search/{cid}")
     public ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
             @PathVariable("cid") Long cid,
-            @RequestParam("skuId")Long skuId
-    ){
-        List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueService.querySearchAttrValueByCidAndSkuId(cid,skuId);
+            @RequestParam("skuId") Long skuId
+    ) {
+        List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueService.querySearchAttrValueByCidAndSkuId(cid, skuId);
         return ResponseVo.ok(skuAttrValueEntities);
     }
+
     /**
      * 列表
      */

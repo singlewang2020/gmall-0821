@@ -35,7 +35,7 @@ public class SkuImagesController {
     private SkuImagesService skuImagesService;
 
     @GetMapping("sku/{skuId}")
-    public ResponseVo<List<SkuImagesEntity>> queryImagesBySkuId(@PathVariable("skuId")Long skuId){
+    public ResponseVo<List<SkuImagesEntity>> queryImagesBySkuId(@PathVariable("skuId") Long skuId) {
         List<SkuImagesEntity> skuImagesEntities =
                 this.skuImagesService.list(
                         new QueryWrapper<SkuImagesEntity>()

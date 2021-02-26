@@ -6,6 +6,7 @@ import java.util.List;
 import com.atguigu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,9 @@ public class SpuController {
     @Autowired
     private SpuService spuService;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @GetMapping("category/{categoryId}")
     public ResponseVo<PageResultVo> querySpuByCidAndPage(PageParamVo pageParamVo, @PathVariable("categoryId") Long cid) {
         PageResultVo resultVo = this.spuService.querySpuByCidAndPage(pageParamVo, cid);
@@ -54,8 +58,9 @@ public class SpuController {
 
     /**
      * 传输对象：
-     *      占位符 不能用对象来接收
-     *      ？     Feign不能接收对象 【在Feign中不支持form表单，支持Json】
+     * 占位符 不能用对象来接收
+     * ？     Feign不能接收对象 【在Feign中不支持form表单，支持Json】
+     *
      * @param paramVo
      * @return
      */
@@ -64,7 +69,7 @@ public class SpuController {
     public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo) {
         PageResultVo pageResultVo = spuService.queryPage(paramVo);
 
-        return ResponseVo.ok((List<SpuEntity>)pageResultVo.getList());
+        return ResponseVo.ok((List<SpuEntity>) pageResultVo.getList());
     }
 
 
@@ -98,7 +103,7 @@ public class SpuController {
     @ApiOperation("修改")
     public ResponseVo update(@RequestBody SpuEntity spu) {
         spuService.updateById(spu);
-
+        this.rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE","item.update",spu.getId());
         return ResponseVo.ok();
     }
 

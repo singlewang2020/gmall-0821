@@ -18,10 +18,10 @@ public class SearchController {
 
     @GetMapping
 //    @ResponseBody
-    public String search(SearchParamVo paramVo, Model model){
+    public String search(SearchParamVo paramVo, Model model) {
         SearchResponseVo responseVo = this.searchService.search(paramVo);
-        model.addAttribute("response",responseVo);
-        model.addAttribute("searchParam",paramVo);
+        model.addAttribute("response", responseVo);
+        model.addAttribute("searchParam", paramVo);
         return "search";
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Configuration
 public class BloomFilterConfig {
 
-    private static final String  KEY_PREFIX = "index:cates:";
+    private static final String KEY_PREFIX = "index:cates:";
 
     @Autowired
     private RedissonClient redissonClient;
@@ -24,16 +24,16 @@ public class BloomFilterConfig {
     private GmallPmsClient pmsClient;
 
     @Bean
-    public RBloomFilter bloomFilter(){
+    public RBloomFilter bloomFilter() {
         // 初始化bloomFilter
         RBloomFilter<Object> bloomFilter = this.redissonClient.getBloomFilter("index:bloom:");
-        bloomFilter.tryInit(3000,0.01);
+        bloomFilter.tryInit(3000, 0.01);
         //给布隆过滤器添加初始化数据
         ResponseVo<List<CategoryEntity>> responseVo = this.pmsClient.queryCategoriesByPid(0l);
         List<CategoryEntity> categoryEntities = responseVo.getData();
-        if (!CollectionUtils.isEmpty(categoryEntities)){
+        if (!CollectionUtils.isEmpty(categoryEntities)) {
             categoryEntities.forEach(categoryEntity -> {
-                bloomFilter.add(KEY_PREFIX + "[" + categoryEntity.getId() + "]" );
+                bloomFilter.add(KEY_PREFIX + "[" + categoryEntity.getId() + "]");
             });
         }
         return bloomFilter;

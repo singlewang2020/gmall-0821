@@ -42,20 +42,20 @@ class GmallSearchApplicationTests {
 
         Integer pageNum = 1;
         Integer pageSize = 100;
-        do{
+        do {
             //分页查询spu
-            PageParamVo pageParamVo = new PageParamVo(pageNum,pageSize,null);
+            PageParamVo pageParamVo = new PageParamVo(pageNum, pageSize, null);
             ResponseVo<List<SpuEntity>> listResponseVo = this.pmsClient.querySpuByPageJson(pageParamVo);
             List<SpuEntity> spuEntities = listResponseVo.getData();
-            if(CollectionUtils.isEmpty(spuEntities)){
+            if (CollectionUtils.isEmpty(spuEntities)) {
                 break;
             }
             // 遍历spu查询每个spu下的所有sku
             spuEntities.forEach(spuEntity -> {
                 ResponseVo<List<SkuEntity>> skuResponseVo = this.pmsClient.querySkusBySpuId(spuEntity.getId());
                 List<SkuEntity> skuEntities = skuResponseVo.getData();
-                if (!CollectionUtils.isEmpty(skuEntities)){
-                    List<Goods> goodsList = skuEntities.stream().map(sku ->{
+                if (!CollectionUtils.isEmpty(skuEntities)) {
+                    List<Goods> goodsList = skuEntities.stream().map(sku -> {
                         Goods goods = new Goods();
 
                         // 创建时间
@@ -71,15 +71,15 @@ class GmallSearchApplicationTests {
                         // 获取库存；销量和是否有货
                         ResponseVo<List<WareSkuEntity>> wareResponseVo = this.wmsClient.queryWareSkusBySkuId(sku.getId());
                         List<WareSkuEntity> wareSkuEntities = wareResponseVo.getData();
-                        if(!CollectionUtils.isEmpty(wareSkuEntities)){
+                        if (!CollectionUtils.isEmpty(wareSkuEntities)) {
                             goods.setSales(wareSkuEntities.stream().map(WareSkuEntity::getSales).reduce((a, b) -> a + b).get());
-                            goods.setStore(wareSkuEntities.stream().anyMatch(wareSkuEntity -> wareSkuEntity.getStock() - wareSkuEntity.getStockLocked() >0));
+                            goods.setStore(wareSkuEntities.stream().anyMatch(wareSkuEntity -> wareSkuEntity.getStock() - wareSkuEntity.getStockLocked() > 0));
                         }
 
                         // 品牌
                         ResponseVo<BrandEntity> brandEntityResponseVo = this.pmsClient.queryBrandById(sku.getBrandId());
                         BrandEntity brandEntity = brandEntityResponseVo.getData();
-                        if(brandEntity !=  null){
+                        if (brandEntity != null) {
                             goods.setBrandId(brandEntity.getId());
                             goods.setBrandName(brandEntity.getName());
                             goods.setLogo(brandEntity.getLogo());
@@ -88,7 +88,7 @@ class GmallSearchApplicationTests {
                         // 分类
                         ResponseVo<CategoryEntity> categoryEntityResponseVo = this.pmsClient.queryCategoryById(sku.getCategoryId());
                         CategoryEntity categoryEntity = categoryEntityResponseVo.getData();
-                        if (categoryEntity != null){
+                        if (categoryEntity != null) {
                             goods.setCategoryId(categoryEntity.getId());
                             goods.setCategoryName(categoryEntity.getName());
                         }
@@ -97,20 +97,20 @@ class GmallSearchApplicationTests {
                         List<SearchAttrValue> attrValues = new ArrayList<>();
                         ResponseVo<List<SkuAttrValueEntity>> saleAttrValueResponseVo = this.pmsClient.querySearchAttrValueByCidAndSkuId(sku.getCategoryId(), sku.getId());
                         List<SkuAttrValueEntity> skuAttrValueEntities = saleAttrValueResponseVo.getData();
-                        if(!CollectionUtils.isEmpty(skuAttrValueEntities)){
+                        if (!CollectionUtils.isEmpty(skuAttrValueEntities)) {
                             attrValues.addAll(skuAttrValueEntities.stream().map(skuAttrValueEntity -> {
                                 SearchAttrValue searchAttrValue = new SearchAttrValue();
-                                BeanUtils.copyProperties(skuAttrValueEntity,searchAttrValue);
+                                BeanUtils.copyProperties(skuAttrValueEntity, searchAttrValue);
                                 return searchAttrValue;
                             }).collect(Collectors.toList()));
                         }
 
                         ResponseVo<List<SpuAttrValueEntity>> baseAttrValueResponseVo = this.pmsClient.querySearchAttrValuesByCidAndSpuId(sku.getCategoryId(), sku.getSpuId());
                         List<SpuAttrValueEntity> spuAttrValueEntities = baseAttrValueResponseVo.getData();
-                        if(!CollectionUtils.isEmpty(spuAttrValueEntities)){
+                        if (!CollectionUtils.isEmpty(spuAttrValueEntities)) {
                             attrValues.addAll(spuAttrValueEntities.stream().map(spuAttrValueEntity -> {
                                 SearchAttrValue searchAttrValue = new SearchAttrValue();
-                                BeanUtils.copyProperties(spuAttrValueEntity,searchAttrValue);
+                                BeanUtils.copyProperties(spuAttrValueEntity, searchAttrValue);
                                 return searchAttrValue;
                             }).collect(Collectors.toList()));
                         }
@@ -121,7 +121,7 @@ class GmallSearchApplicationTests {
                 }
             });
             pageSize = spuEntities.size();
-            pageNum ++;
-        }while(pageSize == 100);
+            pageNum++;
+        } while (pageSize == 100);
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -38,9 +37,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
     public Boolean checkData(String data, Integer type) {
         QueryWrapper<UserEntity> wrapper = new QueryWrapper<>();
         switch (type) {
-            case 1: wrapper.eq("username", data); break;
-            case 2: wrapper.eq("phone", data); break;
-            case 3: wrapper.eq("email", data); break;
+            case 1:
+                wrapper.eq("username", data);
+                break;
+            case 2:
+                wrapper.eq("phone", data);
+                break;
+            case 3:
+                wrapper.eq("email", data);
+                break;
             default:
                 return null;
         }
@@ -78,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
                 .or().eq("email", loginName));
 
         // 判断用户是否为空
-        if (CollectionUtils.isEmpty(userEntities)){
+        if (CollectionUtils.isEmpty(userEntities)) {
             return null;
         }
         // 对用户输入的明文密码加盐加密

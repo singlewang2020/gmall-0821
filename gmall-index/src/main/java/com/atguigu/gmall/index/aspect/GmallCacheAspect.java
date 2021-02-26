@@ -63,7 +63,7 @@ public class GmallCacheAspect {
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 //        System.out.println("环绕前增强");
         // 获取方法签名
-        MethodSignature signature = (MethodSignature)joinPoint.getSignature();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 获取方法对象
         Method method = signature.getMethod();
         // 通过方法签名获取方法的返回结果集类型
@@ -76,16 +76,16 @@ public class GmallCacheAspect {
         // 获取方法参数，返回的数组，而数组的toString方法是地址
         List<Object> args = Arrays.asList(joinPoint.getArgs());
         // 组装缓存的key
-        String key =prefix + args;
+        String key = prefix + args;
 
-        if (!this.bloomFilter.contains(key)){
+        if (!this.bloomFilter.contains(key)) {
             return null;
         }
 
         // 1.先查询缓存，如果缓存中命中，直接返回
         String json = this.redisTemplate.opsForValue().get(key);
-        if (StringUtils.isNotBlank(json)){
-            return JSON.parseObject(json,returnType);
+        if (StringUtils.isNotBlank(json)) {
+            return JSON.parseObject(json, returnType);
         }
         // 2.为了防止缓存击穿，添加分布式锁
         String lock = gmallCache.lock();
@@ -95,8 +95,8 @@ public class GmallCacheAspect {
         try {
             // 3.再查询缓存，如果可以命中，直接返回
             String json2 = this.redisTemplate.opsForValue().get(key);
-            if (StringUtils.isNotBlank(json2)){
-                return JSON.parseObject(json2,returnType);
+            if (StringUtils.isNotBlank(json2)) {
+                return JSON.parseObject(json2, returnType);
             }
 
             // 4.执行目标方法，远程调用或者从数据库中获取数据
@@ -104,12 +104,12 @@ public class GmallCacheAspect {
 
             // 5.把数据放入缓存
             // 获取缓存过期时间，为了防止缓存雪崩给过期时间添加随机值
-            if (result != null){
+            if (result != null) {
                 int timeout = gmallCache.timeout() + new Random().nextInt(gmallCache.random());
-                this.redisTemplate.opsForValue().set(key,JSON.toJSONString(result),timeout, TimeUnit.MINUTES);
-            }else{
+                this.redisTemplate.opsForValue().set(key, JSON.toJSONString(result), timeout, TimeUnit.MINUTES);
+            } else {
                 // 为了防止缓存穿透，返回结果集即使为null也缓存，只是缓存时间为 3 min
-                this.redisTemplate.opsForValue().set(key,JSON.toJSONString(result),3, TimeUnit.MINUTES);
+                this.redisTemplate.opsForValue().set(key, JSON.toJSONString(result), 3, TimeUnit.MINUTES);
             }
 //        System.out.println("环绕后增强");
             return result;

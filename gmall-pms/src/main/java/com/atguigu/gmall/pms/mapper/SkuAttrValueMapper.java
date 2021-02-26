@@ -17,5 +17,5 @@ import java.util.Map;
  */
 @Mapper
 public interface SkuAttrValueMapper extends BaseMapper<SkuAttrValueEntity> {
-    List<Map<String,Object>> querySaleAttrsMappingSkuId(@Param("skuIds")List<Long> skuIds);
+    List<Map<String, Object>> querySaleAttrsMappingSkuId(@Param("skuIds") List<Long> skuIds);
 }
