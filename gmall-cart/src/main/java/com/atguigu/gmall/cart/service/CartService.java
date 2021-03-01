@@ -129,7 +129,7 @@ public class CartService {
 
             //hashOps.put(skuId,JSON.toJSONString(cart));
             //this.cartMapper.insert(cart);
-            this.asyncService.insertCart(cart);
+            this.asyncService.insertCart(userId,cart);
             // 加入购物车是加入价格缓存
             this.redisTemplate.opsForValue().set(PRICE_PREFIX + skuId,skuEntity.getPrice().toString());
         }
@@ -182,7 +182,7 @@ public class CartService {
                 } else {
                     // 用户的购物车不包含该记录，新增记录
                     cart.setUserId(userId.toString());
-                    this.asyncService.insertCart(cart);
+                    this.asyncService.insertCart(userId.toString(), cart);
                 }
                 loginHashOps.put(skuId, JSON.toJSONString(cart));
             });
@@ -258,4 +258,16 @@ public class CartService {
         }
     }
 
+    public List<Cart> queryCheckedCart(Long userId) {
+        String key = KEY_PREFIX + userId;
+        BoundHashOperations<String, Object, Object> hashOps = this.redisTemplate.boundHashOps(key);
+        List<Object> cartJsons = hashOps.values();
+        if (CollectionUtils.isEmpty(cartJsons)) {
+            return null;
+        }
+        return cartJsons.stream()
+                .map(cartJson ->JSON.parseObject(cartJson.toString(),Cart.class))
+                .filter(Cart::getCheck)
+                .collect(Collectors.toList());
+    }
 }

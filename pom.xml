@@ -23,7 +23,9 @@
 		<module>gmall-pms-interface</module>
 		<module>gmall-wms-interface</module>
 		<module>gmall-ums-interface</module>
-	</modules>
+        <module>gmall-cart-interface</module>
+        <module>gmall-oms-interface</module>
+    </modules>
 
 	<properties>
 		<spring-cloud.version>Hoxton.SR2</spring-cloud.version>

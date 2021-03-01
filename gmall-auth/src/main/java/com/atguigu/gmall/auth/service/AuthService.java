@@ -27,8 +27,8 @@ public class AuthService {
     @Autowired
     private GmallUmsClient umsClient;
 
-    public void login(String loginName, String password, HttpServletRequest request, HttpServletResponse response) {
-        try {
+    public void login(String loginName, String password, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
             // 1.校验用户名和密码是否正确：调用远程接口
             ResponseVo<UserEntity> userEntityResponseVo =
                     this.umsClient.queryUser(loginName, password);
@@ -53,8 +53,6 @@ public class AuthService {
 
             // 6.为了方便展示用户的登录信息，需要写入unick
             CookieUtils.setCookie(request, response, this.properties.getUnick(), userEntity.getNickname(), this.properties.getExpire() * 60);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }

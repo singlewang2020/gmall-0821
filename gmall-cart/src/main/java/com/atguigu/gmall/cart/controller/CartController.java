@@ -22,6 +22,8 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+
+
     @GetMapping
     public String saveCart(Cart cart){
         this.cartService.saveCart(cart);
@@ -40,6 +42,13 @@ public class CartController {
         List<Cart> carts = this.cartService.queryCarts();
         model.addAttribute("carts", carts);
         return "cart";
+    }
+
+    @GetMapping("user/{userId}")
+    @ResponseBody
+    public ResponseVo<List<Cart>> queryCheckedCart(@PathVariable("userId")Long userId){
+        List<Cart> carts = this.cartService.queryCheckedCart(userId);
+        return ResponseVo.ok(carts);
     }
 
     @PostMapping("updateNum")

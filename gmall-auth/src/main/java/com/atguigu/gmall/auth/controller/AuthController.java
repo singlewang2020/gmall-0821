@@ -30,7 +30,7 @@ public class AuthController {
             @RequestParam("password") String password,
             HttpServletRequest request,
             HttpServletResponse response
-    ) {
+    ) throws Exception {
         this.authService.login(loginName, password, request, response);
         return "redirect:" + returnUrl;
     }
