@@ -57,4 +57,32 @@ public class StockListener {
         this.redisTemplate.delete(KEY_PREFIX + orderToken);
         channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "STOCK_MINUS_QUEUE",durable = "true"),
+            exchange = @Exchange(value = "ORDER_EXCHANGE",ignoreDeclarationExceptions = "true",type = ExchangeTypes.TOPIC),
+            key = {"stock.minus"}
+    ))
+    public void minusStock(String orderToken, Channel channel, Message message) throws IOException {
+        if (StringUtils.isBlank(orderToken)) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+            return;
+        }
+
+        // 获取锁定库存的缓存信息
+        String skuLockJson = this.redisTemplate.opsForValue().get(KEY_PREFIX + orderToken);
+        if (StringUtils.isBlank(skuLockJson)) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+            return;
+        }
+
+        // 减库存
+        List<SkuLockVo> skuLockVos = JSON.parseArray(skuLockJson, SkuLockVo.class);
+        skuLockVos.forEach(lockVo -> {
+            this.wareSkuMapper.minus(lockVo.getWareSkuId(),lockVo.getCount());
+        });
+        // 解锁库存之后，删除锁定库存的缓存。以防止重复解锁库存
+        this.redisTemplate.delete(KEY_PREFIX + orderToken);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+    }
 }

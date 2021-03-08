@@ -1,12 +1,14 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.atguigu.gmall.order.feign.GmallSmsClient;
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
-import com.atguigu.gmall.pms.feign.GmallSmsClient;
+
 import com.atguigu.gmall.pms.mapper.*;
 import com.atguigu.gmall.pms.service.*;
+
 import com.atguigu.gmall.pms.vo.SkuVo;
 import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
 import com.atguigu.gmall.pms.vo.SpuVo;
@@ -182,6 +184,11 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         spu.setUpdateTime(spu.getCreateTime());
         this.save(spu);
         return spu.getId();
+    }
+
+    @Override
+    public boolean save(SpuEntity entity) {
+        return false;
     }
 
 //    public static void main(String[] args) {

@@ -171,7 +171,7 @@ public class OrderService {
         if (!CollectionUtils.isEmpty(skuLockVos)) {
             throw new OrderException(JSON.toJSONString(skuLockVos));
         }
-        int i = 1/0;
+//        int i = 1/0;
         // 4.下单：？
         UserInfo userInfo = LoginInterceptor.getUserInfo();
         Long userId = userInfo.getUserId();
